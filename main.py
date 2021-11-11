@@ -2,6 +2,7 @@ import discord
 import os
 import requests
 import json
+from keep_alive import keep_alive
 
 client = discord.Client()
 
@@ -22,24 +23,28 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  message.content = message.content.lower()
   if message.author == client.user:
     return
+
+  if 'pls henry' in message.content:
+    await message.channel.send('<@152153136151134211>')
 
   if 'pls dino' in message.content:
     quote = aws_quote()
     await message.channel.send(quote)
 
-  if message.content.startswith('$inspire'):
+  if 'pls inspire' in message.content:
     quote = get_quote()
     await message.channel.send(quote)
 
-  if message.content.startswith('$hello'):
+  if 'pls hello' in message.content:
     await message.channel.send('Hello!')
 
-  if message.content.startswith("$k'"):
-    await message.channel.send('ebekashiest')
+  if 'pls help' in message.content:
+    await message.channel.send("dino, inspire, hello, attention")
 
-  if message.content.startswith("$fuck you"):
-    await message.channel.send('gladly')
-
+  if 'pls attention' in message.content:
+    await message.channel.send('@everyone')
+keep_alive()
 client.run(os.getenv('TOKEN'))
